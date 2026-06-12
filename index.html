@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D İsim Zarı</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#f8fafc,#dbeafe);
+    min-height:100vh;
+    color:#0f172a;
+}
+
+/* Navbar */
+.navbar{
+    height:80px;
+    background:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 8%;
+    box-shadow:0 2px 20px rgba(0,0,0,.05);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:#2563eb;
+}
+
+.nav-links{
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#475569;
+    font-weight:500;
+}
+
+/* Hero */
+.hero{
+    text-align:center;
+    padding:80px 20px 30px;
+}
+
+.hero h1{
+    font-size:60px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#64748b;
+    font-size:18px;
+}
+
+/* Card */
+.section{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
+}
+
+.card{
+    background:white;
+    padding:50px;
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.08);
+}
+
+/* 3D Dice */
+.scene{
+    width:220px;
+    height:220px;
+    perspective:1000px;
+    margin:auto;
+}
+
+.cube{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform 1.5s ease;
+    cursor:pointer;
+}
+
+.face{
+    position:absolute;
+    width:220px;
+    height:220px;
+    background:white;
+    border:3px solid #e2e8f0;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,.1);
+}
+
+/* Zar Noktaları */
+.dot{
+    width:22px;
+    height:22px;
+    background:#0f172a;
+    border-radius:50%;
+    position:absolute;
+}
+
+.center{
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+.top-left{top:20px;left:20px;}
+.top-right{top:20px;right:20px;}
+
+.middle-left{
+    top:50%;
+    left:20px;
+    transform:translateY(-50%);
+}
+
+.middle-right{
+    top:50%;
+    right:20px;
+    transform:translateY(-50%);
+}
+
+.bottom-left{bottom:20px;left:20px;}
+.bottom-right{bottom:20px;right:20px;}
+
+/* Küp yüzleri */
+.front{transform:translateZ(110px);}
+.back{transform:rotateY(180deg) translateZ(110px);}
+.right{transform:rotateY(90deg) translateZ(110px);}
+.left{transform:rotateY(-90deg) translateZ(110px);}
+.top{transform:rotateX(90deg) translateZ(110px);}
+.bottom{transform:rotateX(-90deg) translateZ(110px);}
+
+/* Sonuç */
+.name{
+    text-align:center;
+    margin-top:40px;
+    font-size:34px;
+    font-weight:800;
+    color:#2563eb;
+}
+
+.info{
+    text-align:center;
+    margin-top:10px;
+    color:#64748b;
+}
+
+/* Footer */
+.footer{
+    text-align:center;
+    padding:60px 20px;
+    color:#94a3b8;
+}
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:40px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .scene{
+        width:180px;
+        height:180px;
+    }
+
+    .face{
+        width:180px;
+        height:180px;
+    }
+
+    .front{transform:translateZ(90px);}
+    .back{transform:rotateY(180deg) translateZ(90px);}
+    .right{transform:rotateY(90deg) translateZ(90px);}
+    .left{transform:rotateY(-90deg) translateZ(90px);}
+    .top{transform:rotateX(90deg) translateZ(90px);}
+    .bottom{transform:rotateX(-90deg) translateZ(90px);}
+}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">🎲 İsim Zarı</div>
+
+    <nav class="nav-links">
+        <a href="#">Ana Sayfa</a>
+        <a href="#">Hakkında</a>
+        <a href="#">İletişim</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>3D İsim Zarı</h1>
+    <p>Zarın üzerine tıkla ve rastgele bir isim seçilsin.</p>
+</section>
+
+<section class="section">
+    <div class="card">
+
+        <div class="scene">
+            <div class="cube" id="cube">
+
+                <!-- 1 -->
+                <div class="face front">
+                    <div class="dot center"></div>
+                </div>
+
+                <!-- 6 -->
+                <div class="face back">
+                    <div class="dot top-left"></div>
+                    <div class="dot middle-left"></div>
+                    <div class="dot bottom-left"></div>
+
+                    <div class="dot top-right"></div>
+                    <div class="dot middle-right"></div>
+                    <div class="dot bottom-right"></div>
+                </div>
+
+                <!-- 3 -->
+                <div class="face right">
+                    <div class="dot top-left"></div>
+                    <div class="dot center"></div>
+                    <div class="dot bottom-right"></div>
+                </div>
+
+                <!-- 4 -->
+                <div class="face left">
+                    <div class="dot top-left"></div>
+                    <div class="dot top-right"></div>
+                    <div class="dot bottom-left"></div>
+                    <div class="dot bottom-right"></div>
+                </div>
+
+                <!-- 5 -->
+                <div class="face top">
+                    <div class="dot top-left"></div>
+                    <div class="dot top-right"></div>
+                    <div class="dot center"></div>
+                    <div class="dot bottom-left"></div>
+                    <div class="dot bottom-right"></div>
+                </div>
+
+                <!-- 2 -->
+                <div class="face bottom">
+                    <div class="dot top-left"></div>
+                    <div class="dot bottom-right"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="name" id="name">?</div>
+        <div class="info">Zara tıkla</div>
+
+    </div>
+</section>
+
+<footer class="footer">
+    © 2026 3D İsim Zarı
+</footer>
+
+<script>
+const cube = document.getElementById("cube");
+const nameText = document.getElementById("name");
+
+const names = [
+    "Ahmet",
+    "Mehmet",
+    "Ayşe",
+    "Fatma",
+    "Ali",
+    "Zeynep"
+];
+
+const rotations = {
+    1:"rotateX(0deg) rotateY(0deg)",
+    2:"rotateX(90deg) rotateY(0deg)",
+    3:"rotateY(-90deg)",
+    4:"rotateY(90deg)",
+    5:"rotateX(-90deg)",
+    6:"rotateY(180deg)"
+};
+
+cube.addEventListener("click",()=>{
+
+    const random = Math.floor(Math.random()*6)+1;
+
+    cube.style.transform =
+        `rotateX(${720 + Math.random()*720}deg)
+         rotateY(${720 + Math.random()*720}deg)`;
+
+    nameText.textContent = "Seçiliyor...";
+
+    setTimeout(()=>{
+
+        cube.style.transform = rotations[random];
+        nameText.textContent = names[random-1];
+
+    },1500);
+
+});
+</script>
+
+</body>
+</html>
